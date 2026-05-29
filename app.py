@@ -14,9 +14,14 @@ st.set_page_config(
 
 # ================= LOAD FILES =================
 
-model = pickle.load(open("model.pkl", "rb"))
-le_edu = pickle.load(open("edu_encoder.pkl", "rb"))
-le_role = pickle.load(open("role_encoder.pkl", "rb"))
+try:
+    model = pickle.load(open("model.pkl", "rb"))
+    le_edu = pickle.load(open("edu_encoder.pkl", "rb"))
+    le_role = pickle.load(open("role_encoder.pkl", "rb"))
+
+except:
+    st.error("❌ Model or encoder files not found")
+    st.stop()
 
 # ================= SIDEBAR =================
 
@@ -55,13 +60,15 @@ if page == "Home":
     experience = st.slider(
         "Experience (Years)",
         0,
-        20
+        20,
+        1
     )
 
     age = st.slider(
         "Age",
         18,
-        60
+        60,
+        25
     )
 
     education = st.selectbox(
@@ -101,27 +108,29 @@ if page == "Home":
         else:
             st.success("🚀 High Salary")
 
-        st.balloons()
-
 # ================= DATA ANALYSIS =================
 
 elif page == "Data Analysis":
 
     st.title("📊 Data Analysis")
 
-    df = pd.read_csv("employee_data.csv")
+    try:
+        df = pd.read_csv("employee_data.csv")
 
-    st.subheader("Dataset Preview")
-    st.dataframe(df)
+        st.subheader("Dataset Preview")
+        st.dataframe(df)
 
-    st.subheader("Dataset Shape")
-    st.write(df.shape)
+        st.subheader("Dataset Shape")
+        st.write(df.shape)
 
-    st.subheader("Columns")
-    st.write(df.columns)
+        st.subheader("Columns")
+        st.write(df.columns)
 
-    st.subheader("Summary Statistics")
-    st.write(df.describe())
+        st.subheader("Summary Statistics")
+        st.write(df.describe())
+
+    except:
+        st.error("❌ employee_data.csv file not found")
 
 # ================= VISUALIZATIONS =================
 
@@ -129,26 +138,30 @@ elif page == "Visualizations":
 
     st.title("📈 Data Visualizations")
 
-    df = pd.read_csv("employee_data.csv")
+    try:
+        df = pd.read_csv("employee_data.csv")
 
-    # Scatter Plot
-    st.subheader("Experience vs Salary")
+        # Scatter Plot
+        st.subheader("Experience vs Salary")
 
-    fig, ax = plt.subplots()
+        fig, ax = plt.subplots()
 
-    ax.scatter(df["Experience"], df["Salary"])
+        ax.scatter(df["Experience"], df["Salary"])
 
-    ax.set_xlabel("Experience")
-    ax.set_ylabel("Salary")
+        ax.set_xlabel("Experience")
+        ax.set_ylabel("Salary")
 
-    st.pyplot(fig)
+        st.pyplot(fig)
 
-    # Bar Chart
-    st.subheader("Average Salary by Job Role")
+        # Bar Chart
+        st.subheader("Average Salary by Job Role")
 
-    avg_salary = df.groupby("Job_Role")["Salary"].mean()
+        avg_salary = df.groupby("Job_Role")["Salary"].mean()
 
-    st.bar_chart(avg_salary)
+        st.bar_chart(avg_salary)
+
+    except:
+        st.error("❌ employee_data.csv file not found")
 
 # ================= MODEL INFO =================
 
